@@ -37,26 +37,33 @@ class Websocket{
 	 */
 	public function onOpen($ws,$request)
 	{
-		$randName = randName();
+		$nickname = randName();
 
-		$data = [
-			'type'   =>  'system',
-			'msg'    =>  '欢迎 ' .$randName. ' 加入房间'
+		// 返回昵称
+		$nameData = [
+			'type'   =>  'nickname',
+			'msg'    =>  $nickname
 		];
-
+		$this->sendMsg($ws, [$request->fd], $nameData);
+		
 		// 存放加入用户
 		$this->fdList[] =  $request->fd;
-		$this->fdNameList[ $request->fd ] = $randName;
+		$this->fdNameList[ $request->fd ] = $nickname;
 
 		// 通知新用户加入
+		$data = [
+			'type'   =>  'system',
+			'msg'    =>  '欢迎 ' .$nickname. ' 加入房间'
+		];
+
 		$this->sendMsg( $ws, $this->fdList, $data );
 
+		// 返回当前在线列表
 		$memberData = [
 			'type' => 'member',
 			'memberList'  => array_values($this->fdNameList) 
 		];
 
-		// 返回当前在线列表
 		$this->sendMsg( $ws, $this->fdList, $memberData );
 	}
 

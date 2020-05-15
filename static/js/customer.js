@@ -1,4 +1,5 @@
 
+// 配置 ws 服务端地址
 var ws_host = 'ws://127.0.0.1:8855';
 
 var ws = new WebSocket(ws_host);
@@ -31,20 +32,19 @@ var sendMsg = function(msg){
 }
 
 // ###################### 消息处理 #########################
+// ##### 每个消息类型，需要添加一个 xxDo 方法，作为对应的回调 ####
+// #######################################################
 
 // 消息处理分发器
 var messageHandle = function( obj ){
-  switch (obj.type) {
-    case 'member':
-      memberDo( obj );
-      break;
-    case 'system':
-      systemDo( obj );
-      break;
-    case 'user':
-      userDo( obj );
-      break;
-  }
+  var funcName = obj.type + 'Do';
+  eval(funcName)(obj);
+}
+
+// 昵称信息
+var nicknameDo = function( obj ){
+  $('#nickname').html('');
+  $('#nickname').html(obj.msg);
 }
 
 // 成员信息
@@ -88,7 +88,14 @@ var userDo = function( obj ){
 
 // 将内容添加到聊天框
 var appendSelfContent = function(msg){
-  var item = "<p style='text-align:right'>"+msg+"</p>";
+  var item = "<p>\
+                <div style='text-align:right'>\
+                  我：\
+                </div>\
+                <div style='text-align:right'>"
+                    + msg +"\
+                </div>\
+              </p>";
   $('#readContent').append( item );
 }
 

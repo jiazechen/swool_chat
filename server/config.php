@@ -2,7 +2,7 @@
 
 
 // WS
-define('WS_HOST','127.0.0.1');
+define('WS_HOST','0.0.0.0');
 define('WS_PORT','8855');
 
 // // REDIS

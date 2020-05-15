@@ -9,6 +9,7 @@
 默认监听 8855 端口
 
 > cd swoole_chat/server
+>
 > php ws.php
 
 ## 在线浏览
